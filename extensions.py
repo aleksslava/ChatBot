@@ -2,7 +2,7 @@ import requests as re
 import json
 from config import keys
 
-class ConversionException(Exception):
+class APIException(Exception):
     pass
 
 class Crypto_Convertor:
@@ -10,20 +10,20 @@ class Crypto_Convertor:
     def get_price(quote: str, base: str, amount: str):
 
         if quote == base:
-            raise ConversionException("Невозможно перевести одинаковые валюты.")
+            raise APIException("Невозможно перевести одинаковые валюты.")
 
         try:
             quote_ticker = keys[quote]
         except KeyError:
-            raise ConversionException(f'Не удалось обработать валюту {quote}')
+            raise APIException(f'Не удалось обработать валюту {quote}')
         try:
             base_ticker = keys[base]
         except KeyError:
-            raise ConversionException(f'Не удалось обработать валюту {base}')
+            raise APIException(f'Не удалось обработать валюту {base}')
         try:
             amount = float(amount)
         except KeyError:
-            raise ConversionException(f'Не удалось обработать количество {amount}')
+            raise APIException(f'Не удалось обработать количество {amount}')
 
         r = re.get(f'https://min-api.cryptocompare.com/data/price?fsym={quote_ticker}&tsyms={base_ticker}')
         total_base = json.loads(r.content)[keys[base]]
